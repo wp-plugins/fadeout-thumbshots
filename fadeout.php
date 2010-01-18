@@ -1,10 +1,10 @@
 <?php
 /*
-Plugin Name: FadeOut
-Plugin URI: http://www.mynakedgirlfriend.de/wordpress/fadeout/
+Plugin Name: FadeOut-Thumbshots
+Plugin URI: http://www.mynakedgirlfriend.de/wordpress/fadeout-thumbshots/
 Description: 
 Author: Thomas Schulte
-Version: 1.0
+Version: 1.1
 Author URI: http://www.mynakedgirlfriend.de
 
 Copyright (C) 2010 Thomas Schulte
@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 $version = get_option('ts_fadeout_version');
 if($version == '') {
-	add_option('ts_fadeout_version','1.0','Version of the plugin FadeOut','yes');
+	add_option('ts_fadeout_version','1.1','Version of the plugin FadeOut-Thumbshots','yes');
 }
 
 /* actions */
@@ -44,7 +44,7 @@ if(get_option('ts_fadeout_active') == 'yes') {
 /* add option page */
 function ts_fadeout_options_page() {
 	if(function_exists('add_options_page')){
-		add_options_page('FadeOut','FadeOut',8,'fadeout','ts_fadeout_options');
+		add_options_page('FadeOut-Thumbshots','FadeOut-Thumbshots',8,'fadeout','ts_fadeout_options');
 	}
 }
 
@@ -86,7 +86,7 @@ function ts_fadeout_options(){
 	echo('<div class="wrap">');
 	echo('<form method="post" accept-charset="utf-8">');
     
-	echo('<h2>FadeOut Options</h2>');
+	echo('<h2>FadeOut-Thumbshots Options</h2>');
 	echo('<ol>');
 	echo('<li>Set the option "Plugin active" to "no" if you don\'t want to show tooltips, this way you shouldn\'t deactivate the plugin in case you don\'t want to show the tooltips for a while.</li>');
 	echo('<li>Tooltips can be used for three types of links. "All" just means all links that exist on a page and "external" hides the thumbshots for internal links.</li>');
@@ -139,13 +139,13 @@ function ts_fadeout_options(){
 
 
 function ts_fadeout_header() {
-	$header.= '<link rel="stylesheet" href="' . get_option("siteurl") . '/wp-content/plugins/fadeout/jquery-tooltip/jquery.tooltip.css" />' . "\n";
-	$header.= '<link rel="stylesheet" href="' . get_option("siteurl") . '/wp-content/plugins/fadeout/css/style.css" />' . "\n";
+	$header.= '<link rel="stylesheet" href="' . get_option("siteurl") . '/wp-content/plugins/fadeout-thumbshots/jquery-tooltip/jquery.tooltip.css" />' . "\n";
+	$header.= '<link rel="stylesheet" href="' . get_option("siteurl") . '/wp-content/plugins/fadeout-thumbshots/css/style.css" />' . "\n";
 
-	$header.= '<script type="text/javascript" src="' . get_option("siteurl") . '/wp-content/plugins/fadeout/jquery-tooltip/lib/jquery.js"></script>' . "\n";
-	$header.= '<script type="text/javascript" src="' . get_option("siteurl") . '/wp-content/plugins/fadeout/jquery-tooltip/lib/jquery.bgiframe.js"></script>' . "\n";
-	$header.= '<script type="text/javascript" src="' . get_option("siteurl") . '/wp-content/plugins/fadeout/jquery-tooltip/lib/jquery.dimensions.js"></script>' . "\n";
-	$header.= '<script type="text/javascript" src="' . get_option("siteurl") . '/wp-content/plugins/fadeout/jquery-tooltip/jquery.tooltip.js"></script>' . "\n";
+	$header.= '<script type="text/javascript" src="' . get_option("siteurl") . '/wp-content/plugins/fadeout-thumbshots/jquery-tooltip/lib/jquery.js"></script>' . "\n";
+	$header.= '<script type="text/javascript" src="' . get_option("siteurl") . '/wp-content/plugins/fadeout-thumbshots/jquery-tooltip/lib/jquery.bgiframe.js"></script>' . "\n";
+	$header.= '<script type="text/javascript" src="' . get_option("siteurl") . '/wp-content/plugins/fadeout-thumbshots/jquery-tooltip/lib/jquery.dimensions.js"></script>' . "\n";
+	$header.= '<script type="text/javascript" src="' . get_option("siteurl") . '/wp-content/plugins/fadeout-thumbshots/jquery-tooltip/jquery.tooltip.js"></script>' . "\n";
 
 	$header.= '
 		<script type="text/javascript">
