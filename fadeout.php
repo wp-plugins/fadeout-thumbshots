@@ -4,7 +4,7 @@ Plugin Name: FadeOut-Thumbshots
 Plugin URI: http://www.mynakedgirlfriend.de/wordpress/fadeout-thumbshots/
 Description: 
 Author: Thomas Schulte
-Version: 1.1
+Version: 1.2
 Author URI: http://www.mynakedgirlfriend.de
 
 Copyright (C) 2010 Thomas Schulte
@@ -26,15 +26,34 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 $version = get_option('ts_fadeout_version');
 if($version == '') {
-	add_option('ts_fadeout_version','1.1','Version of the plugin FadeOut-Thumbshots','yes');
+	add_option('ts_fadeout_version','1.2','Version of the plugin FadeOut-Thumbshots','yes');
+}
+
+$active = get_option('ts_fadeout_active');
+if($active == '') {
+	add_option('ts_fadeout_active','yes');
+}
+
+$preview = get_option('ts_fadeout_preview');
+if($preview == '') {
+	add_option('ts_fadeout_preview','all');
+}
+
+$showfooter = get_option('ts_fadeout_showfooter');
+if($showfooter == '') {
+	add_option('ts_fadeout_showfooter','yes');
 }
 
 /* actions */
 add_action( 'admin_menu', 'ts_fadeout_options_page' ); // add option page
 
 if(get_option('ts_fadeout_active') == 'yes') {
+	add_action('plugins_loaded', 'ts_fadeout_add_plugin');
+}
+
+
+function ts_fadeout_add_plugin() {
 	add_action('wp_head', 'ts_fadeout_header');
-	add_filter('the_content', 'ts_fadeout_show');
 	if(get_option('ts_fadeout_showfooter') == 'yes') {
 		add_action('wp_footer', 'ts_fadeout_footer');
 	}
@@ -199,13 +218,8 @@ function ts_fadeout_header() {
 }
 
 
-function ts_fadeout_show($content) {
-	return $content;
-}
-
-
 function ts_fadeout_footer() {
-	$footer.= '<div style=""><a href="http://fadeout.de/"><img style="vertical-align:middle;" src="http://fadeout.de/images/banner-80x15.gif"></a>&nbsp;Plugin by <a href="http://www.mynakedgirlfriend.de">MyNakedGirlfriend.de</a></div>';
+	$footer.= '<div style="text-align:center;"><a href="http://fadeout.de/"><img style="vertical-align:middle;" src="http://fadeout.de/images/banner-80x15.gif"></a>&nbsp;Plugin by <a href="http://www.mynakedgirlfriend.de">MyNakedGirlfriend.de</a></div>';
 	print($footer);
 }
 

@@ -4,7 +4,7 @@ Donate link: http://www.mynakedgirlfriend.de/
 Tags: image, plugin, thumbshot, preview, tooltip
 Requires at least: 2.9
 Tested up to: 2.9.1
-Stable tag: 1.1
+Stable tag: 1.2
 
 This plugin dynamically shows a preview tooltip for hyperlinks on your WordPress site.
 
@@ -29,7 +29,6 @@ Find more about it here: http://bassistance.de/jquery-plugins/jquery-plugin-tool
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Make your settings through the 'Settings' menu in WordPress
 
-
 == Frequently Asked Questions ==
 
 = Were there any questions yet =
@@ -43,6 +42,11 @@ None.
 
 
 == Changelog ==
+
+= 1.2 =
+* Surrounded the wp_head() function with the plugins_loaded() method
+  to avoid some issues regarding the "headers already sent" error.
+* Added a default configuration.
 
 = 1.1 =
 * corrected a dumb mistake (plugin path)
