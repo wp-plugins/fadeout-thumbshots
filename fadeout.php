@@ -137,7 +137,7 @@ function ts_fadeout_options(){
 	echo('<li>Tooltips can be used for three types of links. "All" just means all links that exist on a page and "external" hides the thumbshots for internal links.</li>');
 	echo('<li>Using the option value "marked" means, that the tooltip-thumbshots are only shown if a link has a style class named "fadeout".</li>');
 	echo('<li>The opacity may be set according your needs. I prefer using "0.1", "0.2"... "1" to adjust the opacity.</li>');
-	echo('<li>Although it\'s up to you to decide whether you\'d like to place a backlink on your site or not, the Fadeout homepage says that using their thumbshots requires a backlink to their site.</li>');
+	echo('<li>Although it\'s up to you to decide whether you\'d like to place a backlink on your site or not, the Fadeout homepage says that using their thumbshots requires a backlink to their site. You can enable/disable the footer info with the corresponding select field. The footer was developed very roughly, so if you like the plugin, please link the two domains <a href="http://www.fadeout.de">www.fadeout.de</a> and <a href="http://www.mynakedgirlfriend.de">www.mynakedgirlfriend.de</a> somewhere in your blog. Thanks!</li>');
 	echo('</ol>');
 	echo('<br>');
 	echo('
