@@ -4,7 +4,7 @@ Plugin Name: FadeOut-Thumbshots
 Plugin URI: http://www.mynakedgirlfriend.de/wordpress/fadeout-thumbshots/
 Description: 
 Author: Thomas Schulte
-Version: 1.2
+Version: 1.3
 Author URI: http://www.mynakedgirlfriend.de
 
 Copyright (C) 2010 Thomas Schulte
@@ -24,9 +24,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+
+
 $version = get_option('ts_fadeout_version');
-if($version == '') {
-	add_option('ts_fadeout_version','1.2','Version of the plugin FadeOut-Thumbshots','yes');
+if($version == '' || $version != "1.3") {
+	add_option('ts_fadeout_version','1.3','Version of the plugin FadeOut-Thumbshots','yes');
 }
 
 $active = get_option('ts_fadeout_active');
@@ -43,6 +45,13 @@ $showfooter = get_option('ts_fadeout_showfooter');
 if($showfooter == '') {
 	add_option('ts_fadeout_showfooter','yes');
 }
+
+$scaling = get_option('ts_fadeout_scaling');
+if($scaling == '') {
+	add_option('ts_fadeout_scaling','5');
+}
+
+
 
 /* actions */
 add_action( 'admin_menu', 'ts_fadeout_options_page' ); // add option page
@@ -74,6 +83,7 @@ function ts_fadeout_options(){
 		$active = $_POST['active'];
 		$preview = $_POST['preview'];
     		$showfooter = $_POST['showfooter'];
+		$scaling = $_POST['scaling'];
 
 		if($active == 'yes') {
 			update_option('ts_fadeout_active','yes');
@@ -95,12 +105,17 @@ function ts_fadeout_options(){
 			update_option('ts_fadeout_showfooter','no');
 		}
 
+		if(in_array($scaling, array("2", "3", "4", "5", "6", "7", "8"))) {
+			update_option('ts_fadeout_scaling',$scaling);
+		}
+
 		echo('<div id="message" class="updated fade"><p><strong>Your options were saved.</strong></p></div>');
 	}
 
 	$active = get_option('ts_fadeout_active');
 	$preview = get_option('ts_fadeout_preview');
 	$showfooter = get_option('ts_fadeout_showfooter');
+	$scaling = get_option('ts_fadeout_scaling');
   
 	echo('<div class="wrap">');
 	echo('<form method="post" accept-charset="utf-8">');
@@ -136,6 +151,20 @@ function ts_fadeout_options(){
 				</td>
 			</tr>
 			<tr>
+				<td>tooltip preview size:&nbsp;</td>
+				<td>
+					<select name="scaling" id="scaling">
+						<option value="2"'); if ($scaling == '2') echo(' selected=selected'); echo('>422px × 506px</option>
+						<option value="3"'); if ($scaling == '3') echo(' selected=selected'); echo('>280px × 350px</option>
+						<option value="4"'); if ($scaling == '4') echo(' selected=selected'); echo('>215px × 253px</option>
+						<option value="5"'); if ($scaling == '5') echo(' selected=selected'); echo('>180px × 212px</option>
+						<option value="6"'); if ($scaling == '6') echo(' selected=selected'); echo('>153px × 180px</option>
+						<option value="7"'); if ($scaling == '7') echo(' selected=selected'); echo('>137px × 161px</option>
+						<option value="8"'); if ($scaling == '8') echo(' selected=selected'); echo('>124px × 146px</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
 				<td>show plugin info in footer:&nbsp;</td>
 				<td>
 					<select name="showfooter" id="showfooter">
@@ -159,7 +188,72 @@ function ts_fadeout_options(){
 
 function ts_fadeout_header() {
 	$header.= '<link rel="stylesheet" href="' . get_option("siteurl") . '/wp-content/plugins/fadeout-thumbshots/jquery-tooltip/jquery.tooltip.css" />' . "\n";
-	$header.= '<link rel="stylesheet" href="' . get_option("siteurl") . '/wp-content/plugins/fadeout-thumbshots/css/style.css" />' . "\n";
+
+	$header.= '<style type="text/css">
+		<!--
+			#tooltip.pretty {
+				font-family: Arial;
+				border: none;';
+
+				switch(get_option('ts_fadeout_scaling')) {
+					case 2:
+						$header.= 'width: 422px; height: 506px;';
+						break;
+					case 3:
+						$header.= 'width: 280px; height: 350px;';
+						break;
+					case 4:
+						$header.= 'width: 215px; height: 253px;';
+						break;
+					case 5:
+						$header.= 'width: 180px; height: 212px;';
+						break;
+					case 6:
+						$header.= 'width: 153px; height: 180px;';
+						break;
+					case 7:
+						$header.= 'width: 137px; height: 161px;';
+						break;
+					case 8:
+						$header.= 'width: 124px; height: 146px;';
+						break;
+				}
+
+	$header.= '		padding:0px;
+				opacity: 0.8;
+				background: url("' . get_option("siteurl") . '/wp-content/plugins/fadeout-thumbshots/shadow-' . get_option('ts_fadeout_scaling') . '.png");
+			}
+
+			#tooltip.pretty div {
+				text-align: left;';
+
+				switch(get_option('ts_fadeout_scaling')) {
+					case 2:
+						$header.= 'width: 422px; padding-left:27px; padding-top:32px;';
+						break;
+					case 3:
+						$header.= 'width: 280px; padding-left:17px; padding-top:22px;';
+						break;
+					case 4:
+						$header.= 'width: 215px; padding-left:16px; padding-top:16px;';
+						break;
+					case 5:
+						$header.= 'width: 180px; padding-left:36px; padding-top:22px;';
+						break;
+					case 6:
+						$header.= 'width: 153px; padding-left:15px; padding-top:17px;';
+						break;
+					case 7:
+						$header.= 'width: 153px; padding-left:15px; padding-top:17px;';
+						break;
+					case 8:
+						$header.= 'width: 124px; padding-left:15px; padding-top:17px;';
+						break;
+				}
+
+	$header.= '}
+		-->
+		</style>';
 
 	$header.= '<script type="text/javascript" src="' . get_option("siteurl") . '/wp-content/plugins/fadeout-thumbshots/jquery-tooltip/lib/jquery.js"></script>' . "\n";
 	$header.= '<script type="text/javascript" src="' . get_option("siteurl") . '/wp-content/plugins/fadeout-thumbshots/jquery-tooltip/lib/jquery.bgiframe.js"></script>' . "\n";
@@ -205,7 +299,7 @@ function ts_fadeout_header() {
 						left: 5,
 						fade: 250,
 						bodyHandler: function() {
-							image = "http://fadeout.de/thumbshot-pro/?scale=5&url=" + this + "&wp=1";
+							image = "http://fadeout.de/thumbshot-pro/?scale=' . get_option('ts_fadeout_scaling') . '&url=" + this + "&wp=1";
 							return $("<img />").attr("src", image);';
 
 						$header.= '}
