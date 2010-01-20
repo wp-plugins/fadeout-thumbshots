@@ -4,7 +4,7 @@ Plugin Name: FadeOut-Thumbshots
 Plugin URI: http://www.mynakedgirlfriend.de/wordpress/fadeout-thumbshots/
 Description: 
 Author: Thomas Schulte
-Version: 1.6
+Version: 1.7
 Author URI: http://www.mynakedgirlfriend.de
 
 Copyright (C) 2010 Thomas Schulte
@@ -27,8 +27,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 $version = get_option('ts_fadeout_version');
-if($version == '' || $version != "1.6") {
-	add_option('ts_fadeout_version','1.6','Version of the plugin FadeOut-Thumbshots','yes');
+if($version == '' || $version != "1.7") {
+	add_option('ts_fadeout_version','1.7','Version of the plugin FadeOut-Thumbshots','yes');
 }
 
 $active = get_option('ts_fadeout_active');
@@ -53,7 +53,7 @@ if($scaling == '') {
 
 $opacity = get_option('ts_fadeout_opacity'); 
 if($opacity == '') {
-	add_option('ts_fadeout_opacity','90');
+	add_option('ts_fadeout_opacity','0.9');
 }
 
 
