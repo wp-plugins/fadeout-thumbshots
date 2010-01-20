@@ -205,8 +205,8 @@ function ts_fadeout_header() {
 						left: 5,
 						fade: 250,
 						bodyHandler: function() {
-							image = "http://fadeout.de/thumbshot-pro/?scale=5&url=" + this;';
-							$header.= 'return $("<img />").attr("src", image);';
+							image = "http://fadeout.de/thumbshot-pro/?scale=5&url=" + this + "&wp=1";
+							return $("<img />").attr("src", image);';
 
 						$header.= '}
 					});
