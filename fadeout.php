@@ -4,7 +4,7 @@ Plugin Name: FadeOut-Thumbshots
 Plugin URI: http://www.mynakedgirlfriend.de/wordpress/fadeout-thumbshots/
 Description: 
 Author: Thomas Schulte
-Version: 1.3
+Version: 1.4
 Author URI: http://www.mynakedgirlfriend.de
 
 Copyright (C) 2010 Thomas Schulte
@@ -27,8 +27,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 $version = get_option('ts_fadeout_version');
-if($version == '' || $version != "1.3") {
-	add_option('ts_fadeout_version','1.3','Version of the plugin FadeOut-Thumbshots','yes');
+if($version == '' || $version != "1.4") {
+	add_option('ts_fadeout_version','1.4','Version of the plugin FadeOut-Thumbshots','yes');
 }
 
 $active = get_option('ts_fadeout_active');
@@ -49,6 +49,11 @@ if($showfooter == '') {
 $scaling = get_option('ts_fadeout_scaling');
 if($scaling == '') {
 	add_option('ts_fadeout_scaling','5');
+}
+
+$opacity = get_option('ts_fadeout_opacity'); 
+if($opacity == '') {
+	add_option('ts_fadeout_opacity','90');
 }
 
 
@@ -84,6 +89,7 @@ function ts_fadeout_options(){
 		$preview = $_POST['preview'];
     		$showfooter = $_POST['showfooter'];
 		$scaling = $_POST['scaling'];
+		$opacity = $_POST['opacity'];
 
 		if($active == 'yes') {
 			update_option('ts_fadeout_active','yes');
@@ -109,6 +115,10 @@ function ts_fadeout_options(){
 			update_option('ts_fadeout_scaling',$scaling);
 		}
 
+		if(is_numeric($opacity)) {
+			update_option('ts_fadeout_opacity',$opacity);
+		}
+
 		echo('<div id="message" class="updated fade"><p><strong>Your options were saved.</strong></p></div>');
 	}
 
@@ -116,6 +126,7 @@ function ts_fadeout_options(){
 	$preview = get_option('ts_fadeout_preview');
 	$showfooter = get_option('ts_fadeout_showfooter');
 	$scaling = get_option('ts_fadeout_scaling');
+	$opacity = get_option('ts_fadeout_opacity');
   
 	echo('<div class="wrap">');
 	echo('<form method="post" accept-charset="utf-8">');
@@ -125,6 +136,7 @@ function ts_fadeout_options(){
 	echo('<li>Set the option "Plugin active" to "no" if you don\'t want to show tooltips, this way you shouldn\'t deactivate the plugin in case you don\'t want to show the tooltips for a while.</li>');
 	echo('<li>Tooltips can be used for three types of links. "All" just means all links that exist on a page and "external" hides the thumbshots for internal links.</li>');
 	echo('<li>Using the option value "marked" means, that the tooltip-thumbshots are only shown if a link has a style class named "fadeout".</li>');
+	echo('<li>The opacity may be set according your needs. I prefer using "0.1", "0.2"... "1" to adjust the opacity.</li>');
 	echo('<li>Although it\'s up to you to decide whether you\'d like to place a backlink on your site or not, the Fadeout homepage says that using their thumbshots requires a backlink to their site.</li>');
 	echo('</ol>');
 	echo('<br>');
@@ -171,6 +183,12 @@ function ts_fadeout_options(){
 						<option value="yes" label="yes"'); if ($showfooter == 'yes') echo(' selected=selected'); echo('>yes</option>
 						<option value="no" label="no"'); if ($showfooter == 'no') echo(' selected=selected'); echo('>no</option>
 					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>tooltip opacity:&nbsp;</td>
+				<td>
+					<input type="text" size="3" maxlength="3" name="opacity" value="' . $opacity . '">
 				</td>
 			</tr>
 		</table>');  
@@ -220,7 +238,7 @@ function ts_fadeout_header() {
 				}
 
 	$header.= '		padding:0px;
-				opacity: 0.8;
+				opacity: ' . get_option("ts_fadeout_opacity") . ';
 				background: url("' . get_option("siteurl") . '/wp-content/plugins/fadeout-thumbshots/shadow-' . get_option('ts_fadeout_scaling') . '.png");
 			}
 
@@ -238,7 +256,7 @@ function ts_fadeout_header() {
 						$header.= 'width: 215px; padding-left:16px; padding-top:16px;';
 						break;
 					case 5:
-						$header.= 'width: 180px; padding-left:36px; padding-top:22px;';
+						$header.= 'width: 180px; padding-left:16px; padding-top:22px;';
 						break;
 					case 6:
 						$header.= 'width: 153px; padding-left:15px; padding-top:17px;';
@@ -313,7 +331,7 @@ function ts_fadeout_header() {
 
 
 function ts_fadeout_footer() {
-	$footer.= '<div style="text-align:center;"><a href="http://fadeout.de/"><img style="vertical-align:middle;" src="http://fadeout.de/images/banner-80x15.gif"></a>&nbsp;Plugin by <a href="http://www.mynakedgirlfriend.de">MyNakedGirlfriend.de</a></div>';
+	$footer.= '<div style="text-align:center;"><a href="http://fadeout.de/"><img style="vertical-align:middle;" src="http://fadeout.de/images/banner-80x15.gif" alt="FadeOut-Thumbshots"></a>&nbsp;Plugin by <a href="http://www.mynakedgirlfriend.de">MyNakedGirlfriend.de</a></div>';
 	print($footer);
 }
 
