@@ -1,7 +1,7 @@
 === FadeOut-Thumbshots ===
 Contributors: CupRacer
 Donate link: http://www.mynakedgirlfriend.de/
-Tags: image, plugin, thumbshot, preview, tooltip
+Tags: image, plugin, thumbshot, preview, tooltip, thumbnail
 Requires at least: 2.9
 Tested up to: 2.9.1
 Stable tag: 1.3
