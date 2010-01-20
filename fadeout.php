@@ -4,7 +4,7 @@ Plugin Name: FadeOut-Thumbshots
 Plugin URI: http://www.mynakedgirlfriend.de/wordpress/fadeout-thumbshots/
 Description: 
 Author: Thomas Schulte
-Version: 1.4
+Version: 1.5
 Author URI: http://www.mynakedgirlfriend.de
 
 Copyright (C) 2010 Thomas Schulte
@@ -27,8 +27,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 $version = get_option('ts_fadeout_version');
-if($version == '' || $version != "1.4") {
-	add_option('ts_fadeout_version','1.4','Version of the plugin FadeOut-Thumbshots','yes');
+if($version == '' || $version != "1.5") {
+	add_option('ts_fadeout_version','1.5','Version of the plugin FadeOut-Thumbshots','yes');
 }
 
 $active = get_option('ts_fadeout_active');
@@ -166,14 +166,14 @@ function ts_fadeout_options(){
 				<td>tooltip preview size:&nbsp;</td>
 				<td>
 					<select name="scaling" id="scaling">
-						<option value="2"'); if ($scaling == '2') echo(' selected=selected'); echo('>422px × 506px</option>
-						<option value="3"'); if ($scaling == '3') echo(' selected=selected'); echo('>280px × 350px</option>
-						<option value="4"'); if ($scaling == '4') echo(' selected=selected'); echo('>215px × 253px</option>
-						<option value="5"'); if ($scaling == '5') echo(' selected=selected'); echo('>180px × 212px</option>
-						<option value="6"'); if ($scaling == '6') echo(' selected=selected'); echo('>153px × 180px</option>
-						<option value="7"'); if ($scaling == '7') echo(' selected=selected'); echo('>137px × 161px</option>
-						<option value="8"'); if ($scaling == '8') echo(' selected=selected'); echo('>124px × 146px</option>
-					</select>
+						<option value="2"'); if ($scaling == '2') echo(' selected=selected'); echo('>463 x 523</option>
+						<option value="3"'); if ($scaling == '3') echo(' selected=selected'); echo('>343 x 373</option>
+						<option value="4"'); if ($scaling == '4') echo(' selected=selected'); echo('>278 x 298</option>
+						<option value="5"'); if ($scaling == '5') echo(' selected=selected'); echo('>241 x 253</option>
+						<option value="6"'); if ($scaling == '6') echo(' selected=selected'); echo('>216 x 223</option>
+						<option value="7"'); if ($scaling == '7') echo(' selected=selected'); echo('>198 x 201</option>
+						<option value="8"'); if ($scaling == '8') echo(' selected=selected'); echo('>185 x 185</option>
+					</select> Pixel
 				</td>
 			</tr>
 			<tr>
@@ -215,25 +215,25 @@ function ts_fadeout_header() {
 
 				switch(get_option('ts_fadeout_scaling')) {
 					case 2:
-						$header.= 'width: 422px; height: 506px;';
+						$header.= 'width: 463px; height: 523px;';
 						break;
 					case 3:
-						$header.= 'width: 280px; height: 350px;';
+						$header.= 'width: 343px; height: 373px;';
 						break;
 					case 4:
-						$header.= 'width: 215px; height: 253px;';
+						$header.= 'width: 278px; height: 298px;';
 						break;
 					case 5:
-						$header.= 'width: 180px; height: 212px;';
+						$header.= 'width: 241x; height: 253px;';
 						break;
 					case 6:
-						$header.= 'width: 153px; height: 180px;';
+						$header.= 'width: 216px; height: 223px;';
 						break;
 					case 7:
-						$header.= 'width: 137px; height: 161px;';
+						$header.= 'width: 198px; height: 201px;';
 						break;
 					case 8:
-						$header.= 'width: 124px; height: 146px;';
+						$header.= 'width: 185px; height: 185px;';
 						break;
 				}
 
@@ -247,25 +247,25 @@ function ts_fadeout_header() {
 
 				switch(get_option('ts_fadeout_scaling')) {
 					case 2:
-						$header.= 'width: 422px; padding-left:27px; padding-top:32px;';
+						$header.= 'width: 463px; padding-left: 38px; padding-top:32px;';
 						break;
 					case 3:
-						$header.= 'width: 280px; padding-left:17px; padding-top:22px;';
+						$header.= 'width: 343px; padding-left:38px; padding-top:32px;';
 						break;
 					case 4:
-						$header.= 'width: 215px; padding-left:16px; padding-top:16px;';
+						$header.= 'width: 278px; padding-left:38px; padding-top:32px;';
 						break;
 					case 5:
-						$header.= 'width: 180px; padding-left:16px; padding-top:22px;';
+						$header.= 'width: 200px; padding-left:38px; padding-top:32px;';
 						break;
 					case 6:
-						$header.= 'width: 153px; padding-left:15px; padding-top:17px;';
+						$header.= 'width: 216px; padding-left:38px; padding-top:32px;';
 						break;
 					case 7:
-						$header.= 'width: 153px; padding-left:15px; padding-top:17px;';
+						$header.= 'width: 198px; padding-left:38px; padding-top:32px;';
 						break;
 					case 8:
-						$header.= 'width: 124px; padding-left:15px; padding-top:17px;';
+						$header.= 'width: 185px; padding-left:38px; padding-top:32px;';
 						break;
 				}
 
@@ -336,4 +336,3 @@ function ts_fadeout_footer() {
 }
 
 ?>
-
