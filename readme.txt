@@ -38,7 +38,7 @@ Nope. :-)
 
 == Screenshots ==
 
-None.
+1. This screenshot shows the tooltip preview which is shown while holding the mouse cursor over the WordPress.org hyperlink.
 
 
 == Changelog ==
