@@ -4,7 +4,7 @@ Plugin Name: FadeOut-Thumbshots
 Plugin URI: http://www.mynakedgirlfriend.de/wordpress/fadeout-thumbshots/
 Description: 
 Author: Thomas Schulte
-Version: 1.7
+Version: 1.8
 Author URI: http://www.mynakedgirlfriend.de
 
 Copyright (C) 2010 Thomas Schulte
@@ -27,8 +27,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 $version = get_option('ts_fadeout_version');
-if($version == '' || $version != "1.7") {
-	add_option('ts_fadeout_version','1.7','Version of the plugin FadeOut-Thumbshots','yes');
+if($version == '' || $version != "1.8") {
+	add_option('ts_fadeout_version','1.8','Version of the plugin FadeOut-Thumbshots','yes');
 }
 
 $active = get_option('ts_fadeout_active');
@@ -283,31 +283,28 @@ function ts_fadeout_header() {
 			$(document).ready(function(){
 				$(function() {';
 
-					if(get_option('ts_fadeout_preview') == 'all') {
+					if(get_option('ts_fadeout_preview') == 'all' || get_option('ts_fadeout_preview') == 'external') {
 
-						$header.= '$("a").tooltip({';
-
-					}else if(get_option('ts_fadeout_preview') == 'external') {
-				
 						$header.= 'for (var i = 0; i < document.links.length; ++i) {
 							var link = document.links[i];
 							var blogurl = "' . get_option("siteurl") . '";
 							var linkurl = String(link.href).substring(0, blogurl.length);
-							if(blogurl != linkurl) {
-								link.className=link.className + " fadeout";
+							var linkproto = String(link.href).substring(0, 4);
+
+							if(linkproto == "http") {';
+
+							if(get_option('ts_fadeout_preview') == 'external') {
+								$header.= 'if(blogurl != linkurl) {
+									link.className=link.className + " fadeout";
+								}';
+							}else {
+								$header.= 'link.className=link.className + " fadeout";';
 							}
-						};';
-
-						$header.= '$(".fadeout").tooltip({';
-
-					}else if(get_option('ts_fadeout_preview') == 'marked') {
-
-						$header.= '$(".fadeout").tooltip({';
+						$header.= '}};';
 
 					}
 
-
-					$header.= '
+					$header.= '$(".fadeout").tooltip({
 						track: true,
 						delay: 40,
 						showURL: false,
@@ -318,7 +315,7 @@ function ts_fadeout_header() {
 						fade: 250,
 						bodyHandler: function() {
 							image = "http://fadeout.de/thumbshot-pro/?scale=' . get_option('ts_fadeout_scaling') . '&url=" + this + "&wp=1";
-							return $("<img />").attr("src", image);';
+							return $("<img style=\"border: none;\" />").attr("src", image);';
 
 						$header.= '}
 					});

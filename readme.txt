@@ -4,7 +4,7 @@ Donate link: http://www.mynakedgirlfriend.de/
 Tags: image, plugin, thumbshot, preview, tooltip, thumbnail
 Requires at least: 2.9
 Tested up to: 2.9.1
-Stable tag: 1.7
+Stable tag: 1.8
 
 This plugin dynamically shows a preview tooltip for hyperlinks on your WordPress site.
 
@@ -42,6 +42,10 @@ Nope. :-)
 
 
 == Changelog ==
+
+= 1.8 =
+* Set thumbnail border to "none" because of some buggy css stylesheets.
+* Added a filter, so that only http* links are previewed automatically when the setting "external" or "all" is set. (Thx Bernhard)
 
 = 1.7 =
 * Deleted a needless whitespace character that might have caused some problems with other plugins.
