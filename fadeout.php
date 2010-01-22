@@ -2,9 +2,9 @@
 /*
 Plugin Name: FadeOut-Thumbshots
 Plugin URI: http://www.mynakedgirlfriend.de/wordpress/fadeout-thumbshots/
-Description: 
+Description: This plugin dynamically shows a preview tooltip for hyperlinks on your WordPress site.
 Author: Thomas Schulte
-Version: 1.8
+Version: 1.9
 Author URI: http://www.mynakedgirlfriend.de
 
 Copyright (C) 2010 Thomas Schulte
@@ -27,8 +27,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 $version = get_option('ts_fadeout_version');
-if($version == '' || $version != "1.8") {
-	add_option('ts_fadeout_version','1.8','Version of the plugin FadeOut-Thumbshots','yes');
+if($version == '' || $version != "1.9") {
+	add_option('ts_fadeout_version','1.9','Version of the plugin FadeOut-Thumbshots','yes');
 }
 
 $active = get_option('ts_fadeout_active');
@@ -56,7 +56,10 @@ if($opacity == '') {
 	add_option('ts_fadeout_opacity','0.9');
 }
 
-
+$dummylang = get_option('ts_fadeout_dummylang');
+if($dummylang == '') {
+	add_option('ts_fadeout_dummylang','de');
+}
 
 /* actions */
 add_action( 'admin_menu', 'ts_fadeout_options_page' ); // add option page
@@ -90,6 +93,7 @@ function ts_fadeout_options(){
     		$showfooter = $_POST['showfooter'];
 		$scaling = $_POST['scaling'];
 		$opacity = $_POST['opacity'];
+		$dummylang = $_POST['dummylang'];
 
 		if($active == 'yes') {
 			update_option('ts_fadeout_active','yes');
@@ -119,6 +123,10 @@ function ts_fadeout_options(){
 			update_option('ts_fadeout_opacity',$opacity);
 		}
 
+		if(in_array($dummylang, array("en", "de"))) {
+			update_option('ts_fadeout_dummylang',$dummylang);
+		}
+
 		echo('<div id="message" class="updated fade"><p><strong>Your options were saved.</strong></p></div>');
 	}
 
@@ -127,6 +135,7 @@ function ts_fadeout_options(){
 	$showfooter = get_option('ts_fadeout_showfooter');
 	$scaling = get_option('ts_fadeout_scaling');
 	$opacity = get_option('ts_fadeout_opacity');
+	$dummylang = get_option('ts_fadeout_dummylang');
   
 	echo('<div class="wrap">');
 	echo('<form method="post" accept-charset="utf-8">');
@@ -189,6 +198,15 @@ function ts_fadeout_options(){
 				<td>tooltip opacity:&nbsp;</td>
 				<td>
 					<input type="text" size="3" maxlength="3" name="opacity" value="' . $opacity . '">
+				</td>
+			</tr>
+			<tr>
+				<td>dummy lang:&nbsp;</td>
+				<td>
+					<select name="dummylang" id="dummylang">
+						<option value="en" label="en"'); if ($dummylang == 'en') echo(' selected=selected'); echo('>english</option>
+						<option value="de" label="de"'); if ($dummylang == 'de') echo(' selected=selected'); echo('>german</option>
+					</select>
 				</td>
 			</tr>
 		</table>');  
@@ -314,7 +332,7 @@ function ts_fadeout_header() {
 						left: 5,
 						fade: 250,
 						bodyHandler: function() {
-							image = "http://fadeout.de/thumbshot-pro/?scale=' . get_option('ts_fadeout_scaling') . '&url=" + this + "&wp=1";
+							image = "http://fadeout.de/thumbshot-pro/?scale=' . get_option('ts_fadeout_scaling') . '&url=" + this + "&wp=1&lang=' . get_option('ts_fadeout_dummylang') . '";
 							return $("<img style=\"border: none;\" />").attr("src", image);';
 
 						$header.= '}
@@ -328,7 +346,7 @@ function ts_fadeout_header() {
 
 
 function ts_fadeout_footer() {
-	$footer.= '<div style="text-align:center;"><a href="http://fadeout.de/"><img style="vertical-align:middle;" src="http://fadeout.de/images/banner-80x15.gif" alt="FadeOut-Thumbshots"></a>&nbsp;Plugin by <a href="http://www.mynakedgirlfriend.de">MyNakedGirlfriend.de</a></div>';
+	$footer.= '<div style="text-align:center;"><a href="http://fadeout.de/"><img style="vertical-align:middle;" src="http://fadeout.de/images/link.gif" alt="FadeOut-Thumbshots"></a>&nbsp;Plugin by <a href="http://www.mynakedgirlfriend.de">MyNakedGirlfriend.de</a></div>';
 	print($footer);
 }
 
