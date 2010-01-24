@@ -4,7 +4,7 @@ Donate link: http://www.mynakedgirlfriend.de/
 Tags: image, plugin, thumbshot, preview, tooltip, thumbnail
 Requires at least: 2.9
 Tested up to: 2.9.1
-Stable tag: 1.9
+Stable tag: 1.99
 
 This plugin dynamically shows a preview tooltip for hyperlinks on your WordPress site.
 
@@ -42,6 +42,9 @@ Nope. :-)
 
 
 == Changelog ==
+
+= 1.99 =
+* Changed a variable name which caused trouble with the start page definition (Thx Frank)
 
 = 1.9 =
 * Added new config option for a localized dummy tooltip (de = "Thumbshot wird erstellt"; en = "coming soon").
