@@ -4,7 +4,7 @@ Plugin Name: FadeOut-Thumbshots
 Plugin URI: http://www.mynakedgirlfriend.de/wordpress/fadeout-thumbshots/
 Description: This plugin dynamically shows a preview tooltip for hyperlinks on your WordPress site.
 Author: Thomas Schulte
-Version: 1.9
+Version: 1.99
 Author URI: http://www.mynakedgirlfriend.de
 
 Copyright (C) 2010 Thomas Schulte
