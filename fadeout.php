@@ -26,38 +26,38 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 
-$version = get_option('ts_fadeout_version');
-if($version == '' || $version != "1.9") {
-	add_option('ts_fadeout_version','1.9','Version of the plugin FadeOut-Thumbshots','yes');
+$ts_fadeout_version = get_option('ts_fadeout_version');
+if($ts_fadeout_version == '' || $ts_fadeout_version != "1.99") {
+	add_option('ts_fadeout_version','1.99','Version of the plugin FadeOut-Thumbshots','yes');
 }
 
-$active = get_option('ts_fadeout_active');
-if($active == '') {
+$ts_fadeout_active = get_option('ts_fadeout_active');
+if($ts_fadeout_active == '') {
 	add_option('ts_fadeout_active','yes');
 }
 
-$preview = get_option('ts_fadeout_preview');
-if($preview == '') {
+$ts_fadeout_preview = get_option('ts_fadeout_preview');
+if($ts_fadeout_preview == '') {
 	add_option('ts_fadeout_preview','all');
 }
 
-$showfooter = get_option('ts_fadeout_showfooter');
-if($showfooter == '') {
+$ts_fadeout_showfooter = get_option('ts_fadeout_showfooter');
+if($ts_fadeout_showfooter == '') {
 	add_option('ts_fadeout_showfooter','yes');
 }
 
-$scaling = get_option('ts_fadeout_scaling');
-if($scaling == '') {
+$ts_fadeout_scaling = get_option('ts_fadeout_scaling');
+if($ts_fadeout_scaling == '') {
 	add_option('ts_fadeout_scaling','5');
 }
 
-$opacity = get_option('ts_fadeout_opacity'); 
-if($opacity == '') {
+$ts_fadeout_opacity = get_option('ts_fadeout_opacity'); 
+if($ts_fadeout_opacity == '') {
 	add_option('ts_fadeout_opacity','0.9');
 }
 
-$dummylang = get_option('ts_fadeout_dummylang');
-if($dummylang == '') {
+$ts_fadeout_dummylang = get_option('ts_fadeout_dummylang');
+if($ts_fadeout_dummylang == '') {
 	add_option('ts_fadeout_dummylang','de');
 }
 
