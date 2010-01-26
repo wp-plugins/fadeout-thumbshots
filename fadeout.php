@@ -4,7 +4,7 @@ Plugin Name: FadeOut-Thumbshots
 Plugin URI: http://www.mynakedgirlfriend.de/wordpress/fadeout-thumbshots/
 Description: This plugin dynamically shows a preview tooltip for hyperlinks on your WordPress site.
 Author: Thomas Schulte
-Version: 1.99
+Version: 1.999
 Author URI: http://www.mynakedgirlfriend.de
 
 Copyright (C) 2010 Thomas Schulte
@@ -27,8 +27,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 $ts_fadeout_version = get_option('ts_fadeout_version');
-if($ts_fadeout_version == '' || $ts_fadeout_version != "1.99") {
-	add_option('ts_fadeout_version','1.99','Version of the plugin FadeOut-Thumbshots','yes');
+if($ts_fadeout_version == '' || $ts_fadeout_version != "1.999") {
+	add_option('ts_fadeout_version','1.999','Version of the plugin FadeOut-Thumbshots','yes');
 }
 
 $ts_fadeout_active = get_option('ts_fadeout_active');
@@ -61,6 +61,13 @@ if($ts_fadeout_dummylang == '') {
 	add_option('ts_fadeout_dummylang','de');
 }
 
+$ts_fadeout_code_placement = get_option('ts_fadeout_code_placement');
+if($ts_fadeout_code_placement == '') {
+	add_option('ts_fadeout_code_placement','head');
+}
+
+
+
 /* actions */
 add_action( 'admin_menu', 'ts_fadeout_options_page' ); // add option page
 
@@ -70,9 +77,16 @@ if(get_option('ts_fadeout_active') == 'yes') {
 
 
 function ts_fadeout_add_plugin() {
-	add_action('wp_head', 'ts_fadeout_header');
+	add_action('wp_head', 'ts_fadeout_styles');
+
+	$code_placement = get_option('ts_fadeout_code_placement');
+	if($code_placement == "head") {
+		add_action('wp_head', 'ts_fadeout_scripts');
+	}else {
+		add_action('wp_footer', 'ts_fadeout_scripts');
+	}
 	if(get_option('ts_fadeout_showfooter') == 'yes') {
-		add_action('wp_footer', 'ts_fadeout_footer');
+		add_action('wp_footer', 'ts_fadeout_about');
 	}
 }
 
@@ -94,6 +108,8 @@ function ts_fadeout_options(){
 		$scaling = $_POST['scaling'];
 		$opacity = $_POST['opacity'];
 		$dummylang = $_POST['dummylang'];
+		$code_placement = $_POST['code_placement'];
+		$include_pages = $_POST['include_pages'];
 
 		if($active == 'yes') {
 			update_option('ts_fadeout_active','yes');
@@ -127,6 +143,13 @@ function ts_fadeout_options(){
 			update_option('ts_fadeout_dummylang',$dummylang);
 		}
 
+		if(in_array($code_placement, array("head", "footer"))) {
+			update_option('ts_fadeout_code_placement',$code_placement);
+		}
+
+		//FIXME: validation missing; overwrite even if empty
+		update_option('ts_fadeout_include_pages',$include_pages);
+
 		echo('<div id="message" class="updated fade"><p><strong>Your options were saved.</strong></p></div>');
 	}
 
@@ -136,6 +159,8 @@ function ts_fadeout_options(){
 	$scaling = get_option('ts_fadeout_scaling');
 	$opacity = get_option('ts_fadeout_opacity');
 	$dummylang = get_option('ts_fadeout_dummylang');
+	$code_placement = get_option('ts_fadeout_code_placement');
+	$include_pages = get_option('ts_fadeout_include_pages');
   
 	echo('<div class="wrap">');
 	echo('<form method="post" accept-charset="utf-8">');
@@ -147,6 +172,8 @@ function ts_fadeout_options(){
 	echo('<li>Using the option value "marked" means, that the tooltip-thumbshots are only shown if a link has a style class named "fadeout".</li>');
 	echo('<li>The opacity may be set according your needs. I prefer using "0.1", "0.2"... "1" to adjust the opacity.</li>');
 	echo('<li>Although it\'s up to you to decide whether you\'d like to place a backlink on your site or not, the Fadeout homepage says that using their thumbshots requires a backlink to their site. You can enable/disable the footer info with the corresponding select field. The footer was developed very roughly, so if you like the plugin, please link the two domains <a href="http://www.fadeout.de">www.fadeout.de</a> and <a href="http://www.mynakedgirlfriend.de">www.mynakedgirlfriend.de</a> somewhere in your blog. Thanks!</li>');
+	echo('<li>The option "code placement" defines the place where the plugin javascript is integrated. The default is "head" (which means the html head tag) but it\'s also possible to put the code at the end of your page by choosing "footer"</li>');
+	echo('<li>While in "external" or "all" mode, you can limit the plugin to explicit defined pages with the option "include pages". Just leave it empty to ignore this feature. :-)</li>');
 	echo('</ol>');
 	echo('<br>');
 	echo('
@@ -209,6 +236,21 @@ function ts_fadeout_options(){
 					</select>
 				</td>
 			</tr>
+			<tr>
+				<td>code placement:&nbsp;</td>
+				<td>
+					<select name="code_placement" id="code_placement">
+						<option value="head" label="head"'); if ($code_placement == 'head') echo(' selected=selected'); echo('>head</option>
+						<option value="footer" label="footer"'); if ($code_placement == 'footer') echo(' selected=selected'); echo('>footer</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>include page ID\'s:&nbsp;</td>
+				<td>
+					<input type="text" size="20" name="include_pages" value ="' . $include_pages . '"> (separate with whitespaces - keep field empty to include all)
+				</td>
+			</tr>
 		</table>');  
   
 	echo('
@@ -222,7 +264,25 @@ function ts_fadeout_options(){
 }
 
 
-function ts_fadeout_header() {
+
+function ts_fadeout_get_include_pages() {
+	$keywords = NULL;
+	$include_pages = get_option('ts_fadeout_include_pages');
+	if($include_pages != "") {
+		$keywords = preg_split("/[\s,]+/", $include_pages);
+	}
+	return $keywords;
+}
+
+
+function ts_fadeout_styles() {
+	if((get_option('ts_fadeout_preview') == "all" || get_option('ts_fadeout_preview') == "external") && sizeof(ts_fadeout_get_include_pages()) > 0) {
+		global $post;
+		if(!in_array($post->ID, ts_fadeout_get_include_pages())) {
+			return;
+		}
+	}
+
 	$header.= '<link rel="stylesheet" href="' . get_option("siteurl") . '/wp-content/plugins/fadeout-thumbshots/jquery-tooltip/jquery.tooltip.css" />' . "\n";
 
 	$header.= '<style type="text/css">
@@ -291,6 +351,19 @@ function ts_fadeout_header() {
 		-->
 		</style>';
 
+	print $header;
+}
+
+
+
+function ts_fadeout_scripts() {
+	if((get_option('ts_fadeout_preview') == "all" || get_option('ts_fadeout_preview') == "external") && sizeof(ts_fadeout_get_include_pages()) > 0) {
+		global $post;
+		if(!in_array($post->ID, ts_fadeout_get_include_pages())) {
+			return;
+		}
+	}
+
 	$header.= '<script type="text/javascript" src="' . get_option("siteurl") . '/wp-content/plugins/fadeout-thumbshots/jquery-tooltip/lib/jquery.js"></script>' . "\n";
 	$header.= '<script type="text/javascript" src="' . get_option("siteurl") . '/wp-content/plugins/fadeout-thumbshots/jquery-tooltip/lib/jquery.bgiframe.js"></script>' . "\n";
 	$header.= '<script type="text/javascript" src="' . get_option("siteurl") . '/wp-content/plugins/fadeout-thumbshots/jquery-tooltip/lib/jquery.dimensions.js"></script>' . "\n";
@@ -345,7 +418,7 @@ function ts_fadeout_header() {
 }
 
 
-function ts_fadeout_footer() {
+function ts_fadeout_about() {
 	$footer.= '<div style="text-align:center;"><a href="http://fadeout.de/"><img style="vertical-align:middle;" src="http://fadeout.de/images/link.gif" alt="FadeOut-Thumbshots"></a>&nbsp;Plugin by <a href="http://www.mynakedgirlfriend.de">MyNakedGirlfriend.de</a></div>';
 	print($footer);
 }

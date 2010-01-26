@@ -43,6 +43,10 @@ Nope. :-)
 
 == Changelog ==
 
+= 1.999 =
+* Added an option to define where the javascript code should be placed on a page (in html head tag or the footer).
+* Added an input field for page IDs to limit the plugin to only explicitely defined pages. This is a very basic version at the moment.
+
 = 1.99 =
 * Changed a variable name which caused trouble with the start page definition (Thx Frank)
 
