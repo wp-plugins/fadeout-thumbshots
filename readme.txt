@@ -4,7 +4,7 @@ Donate link: http://www.mynakedgirlfriend.de/
 Tags: image, plugin, thumbshot, preview, tooltip, thumbnail
 Requires at least: 2.9
 Tested up to: 2.9.1
-Stable tag: 1.99
+Stable tag: 1.999
 
 This plugin dynamically shows a preview tooltip for hyperlinks on your WordPress site.
 
@@ -31,9 +31,10 @@ Find more about it here: http://bassistance.de/jquery-plugins/jquery-plugin-tool
 
 == Frequently Asked Questions ==
 
-= Were there any questions yet =
+= Why does it take a couple of hovers to get the link image to appear? =
 
-Nope. :-)
+It's not a bug - it's a mechanism.
+The plugin doesn't generate the thumbnails directly. The script sends a request for the thumbnail to the service of http://fadeout.de. If the URL is requested for the first time, it'll be put in a queue - and you see a "coming soon". After a few moments the thumbnail is created at fadeout.de, so if you hover the link, the request for the thumbnail is successful and it's served and shown correctly.
 
 
 == Screenshots ==
