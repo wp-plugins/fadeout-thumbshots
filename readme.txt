@@ -3,7 +3,7 @@ Contributors: CupRacer
 Donate link: http://www.mynakedgirlfriend.de/
 Tags: image, plugin, thumbshot, preview, tooltip, thumbnail
 Requires at least: 2.9
-Tested up to: 2.9.1
+Tested up to: 2.9.2
 Stable tag: 1.999
 
 This plugin dynamically shows a preview tooltip for hyperlinks on your WordPress site.
