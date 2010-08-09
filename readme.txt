@@ -47,6 +47,9 @@ The plugin doesn't generate the thumbnails directly. The script sends a request 
 
 == Changelog ==
 
+= 2.01 =
+* You may additionally use the CSS class "nofadeout" to explicitly disable the preview tooltip for single hyperlinks when using the preview types "all" or "external". (Thx to David A. for his suggest)
+
 = 2.0 =
 * Added an option to choose the fading direction of the images (right = big to small / left = small to big).
 

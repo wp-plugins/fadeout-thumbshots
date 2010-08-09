@@ -181,6 +181,7 @@ function ts_fadeout_options(){
 	echo('<li>Set the option "Plugin active" to "no" if you don\'t want to show tooltips, this way you shouldn\'t deactivate the plugin in case you don\'t want to show the tooltips for a while.</li>');
 	echo('<li>Tooltips can be used for three types of links. "All" just means all links that exist on a page and "external" hides the thumbshots for internal links.</li>');
 	echo('<li>Using the option value "marked" means, that the tooltip-thumbshots are only shown if a link has a style class named "fadeout".</li>');
+	echo('<li>You may additionally use the CSS class "nofadeout" to explicitly disable the preview tooltip for single hyperlinks when using the preview types "all" or "external".</li>');
 	echo('<li>The opacity may be set according your needs. I prefer using "0.1", "0.2"... "1" to adjust the opacity.</li>');
 	echo('<li>The option "code placement" defines the place where the plugin javascript is integrated. The default is "head" (which means the html head tag) but it\'s also possible to put the code at the end of your page by choosing "footer"</li>');
 	echo('<li>While in "external" or "all" mode, you can limit the plugin to explicit defined pages with the option "include pages". Just leave it empty to ignore this feature. :-)</li>');
@@ -404,15 +405,17 @@ function ts_fadeout_scripts() {
 							var linkurl = String(link.href).substring(0, blogurl.length);
 							var linkproto = String(link.href).substring(0, 4);
 
-							if(linkproto == "http") {';
+							if(linkproto == "http") {
 
-							if(get_option('ts_fadeout_preview') == 'external') {
-								$header.= 'if(blogurl != linkurl) {
-									link.className=link.className + " fadeout";
-								}';
-							}else {
-								$header.= 'link.className=link.className + " fadeout";';
-							}
+								if(link.className.indexOf("nofadeout") == -1) {';
+									if(get_option('ts_fadeout_preview') == 'external') {
+										$header.= 'if(blogurl != linkurl) {
+											link.className=link.className + " fadeout";
+										}';
+									}else {
+										$header.= 'link.className=link.className + " fadeout";';
+									}
+						$header.= '}';
 						$header.= '}};';
 
 					}
