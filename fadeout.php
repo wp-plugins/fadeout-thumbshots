@@ -4,7 +4,7 @@ Plugin Name: FadeOut-Thumbshots
 Plugin URI: http://www.mynakedgirlfriend.de/wordpress/fadeout-thumbshots/
 Description: This plugin dynamically shows a preview tooltip for hyperlinks on your WordPress site.
 Author: Thomas Schulte
-Version: 2.0
+Version: 2.01
 Author URI: http://www.mynakedgirlfriend.de
 
 Copyright (C) 2010 Thomas Schulte
@@ -27,8 +27,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 $ts_fadeout_version = get_option('ts_fadeout_version');
-if($ts_fadeout_version == '' || $ts_fadeout_version != "2.0") {
-	add_option('ts_fadeout_version','2.0','Version of the plugin FadeOut-Thumbshots','yes');
+if($ts_fadeout_version == '' || $ts_fadeout_version != "2.01") {
+	add_option('ts_fadeout_version','2.01','Version of the plugin FadeOut-Thumbshots','yes');
 }
 
 $ts_fadeout_active = get_option('ts_fadeout_active');
@@ -71,6 +71,10 @@ if($ts_fadeout_fade_direction == '') {
 	add_option('ts_fadeout_fade_direction','1');
 }
 
+$ts_fadeout_excluded_urls = get_option('ts_fadeout_excluded_urls');
+if($ts_fadeout_excluded_urls == '') {
+	add_option('ts_fadeout_excluded_urls','');
+}
 
 
 /* actions */
@@ -116,6 +120,7 @@ function ts_fadeout_options(){
 		$code_placement = $_POST['code_placement'];
 		$include_pages = $_POST['include_pages'];
 		$fade_direction = $_POST['fade_direction'];
+		$excluded_urls = $_POST['excluded_urls'];
 
 		if($active == 'yes') {
 			update_option('ts_fadeout_active','yes');
@@ -160,6 +165,9 @@ function ts_fadeout_options(){
 			update_option('ts_fadeout_fade_direction',$fade_direction);
 		}
 
+		//FIXME: validation missing
+		update_option('ts_fadeout_excluded_urls',$excluded_urls);
+
 		echo('<div id="message" class="updated fade"><p><strong>Your options were saved.</strong></p></div>');
 	}
 
@@ -172,6 +180,7 @@ function ts_fadeout_options(){
 	$code_placement = get_option('ts_fadeout_code_placement');
 	$include_pages = get_option('ts_fadeout_include_pages');
 	$fade_direction = get_option('ts_fadeout_fade_direction');
+	$excluded_urls = get_option('ts_fadeout_excluded_urls');
   
 	echo('<div class="wrap">');
 	echo('<form method="post" accept-charset="utf-8">');
@@ -186,9 +195,10 @@ function ts_fadeout_options(){
 	echo('<li>The option "code placement" defines the place where the plugin javascript is integrated. The default is "head" (which means the html head tag) but it\'s also possible to put the code at the end of your page by choosing "footer"</li>');
 	echo('<li>While in "external" or "all" mode, you can limit the plugin to explicit defined pages with the option "include pages". Just leave it empty to ignore this feature. :-)</li>');
 	echo('<li>With "fading direction" you can easily switch the angle of the images (right = left:big to right:small / left = right:big to left:small).</li>');
+	echo('<li>Use the "excluded URLs" option to define (yes, you guessed it already) excluded URLs. These URLs have to be separated by semicolons and must be used full-qualified, so you have to start each URL with "http://". Hyperlink-exclude-matching is done from left to right, which means that the excluded URL "http://www.google" matches all "http://www.google*" URLs. "http://www.google.com/useless-stuff/" matches "http://www.google.com/useless-stuff/*" and so on. This is - at the moment - a very rough implementation and works only with the preview types "all" or "external". Please tell me about your results with this.</li>');
 	echo('</ol>');
 	echo('<p>Although it\'s up to you to decide whether you\'d like to place a backlink on your site or not, the Fadeout homepage says that using their thumbshots requires a backlink to their site. You can enable/disable the footer info with the corresponding select field. The footer was developed very roughly, so if you like the plugin, please link the two domains <a href="http://www.fadeout.de">www.fadeout.de</a> and <a href="http://www.mynakedgirlfriend.de">www.mynakedgirlfriend.de</a> somewhere in your blog. Thanks!</p>');
-	echo('<p>Your feedback should go here: http://www.mynakedgirlfriend.de/wordpress/fadeout-thumbshots/</p>');
+	echo('<p>Your feedback should go here: <a href="http://www.mynakedgirlfriend.de/wordpress/fadeout-thumbshots/">http://www.mynakedgirlfriend.de/wordpress/fadeout-thumbshots/</a></p>');
 	echo('<br>');
 	echo('
 		<h3>Settings</h3>
@@ -272,6 +282,12 @@ function ts_fadeout_options(){
 						<option value="1" label="right"'); if ($fade_direction == '1') echo(' selected=selected'); echo('>right</option>
 						<option value="2" label="left"'); if ($fade_direction == '2') echo(' selected=selected'); echo('>left</option>
 					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>excluded URL\'s:&nbsp;</td>
+				<td>
+					<input type="text" size="50" name="excluded_urls" value ="' . $excluded_urls . '"> (separate with semicolons - keep field empty to skip this functionality)
 				</td>
 			</tr>
 		</table>');  
@@ -405,19 +421,36 @@ function ts_fadeout_scripts() {
 							var linkurl = String(link.href).substring(0, blogurl.length);
 							var linkproto = String(link.href).substring(0, 4);
 
-							if(linkproto == "http") {
+							if(linkproto == "http") {';
 
-								if(link.className.indexOf("nofadeout") == -1) {';
-									if(get_option('ts_fadeout_preview') == 'external') {
-										$header.= 'if(blogurl != linkurl) {
-											link.className=link.className + " fadeout";
-										}';
-									}else {
-										$header.= 'link.className=link.className + " fadeout";';
+								$excluded_urls = get_option('ts_fadeout_excluded_urls');
+
+								if(strlen($excluded_urls) > 0) {
+									$excludes = preg_split("/;/", $excluded_urls);
+
+									foreach($excludes as $exclude) {
+										$header.= '
+											var excludeurl = "' . $exclude . '";
+											if(String(link.href).substring(0, excludeurl.length) == excludeurl) {
+												link.className=link.className + " nofadeout";
+											}
+										';
 									}
-						$header.= '}';
-						$header.= '}};';
+								}
 
+								$header.= '
+									if(link.className.indexOf("nofadeout") == -1) {';
+										if(get_option('ts_fadeout_preview') == 'external') {
+											$header.= '
+												if(blogurl != linkurl) {
+													link.className=link.className + " fadeout";
+												}
+											';
+										}else {
+											$header.= 'link.className=link.className + " fadeout";';
+										}
+									$header.= '}';
+								$header.= '}};';
 					}
 
 					$header.= '$(".fadeout").tooltip({
