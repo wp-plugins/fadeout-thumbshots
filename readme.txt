@@ -25,9 +25,6 @@ UPDATE 2010-08-09:
 I got a lot of responses relating to new features and I'm already planning the implementations.
 So thanks for your feedback and stay tuned for more news to arrive. :-)
 
-Have fun with version 2.0 or have some more fun with the development version which has two more great features. 
-The development version will become stable soon. See Changelog for details...
-
 
 == Installation ==
 
