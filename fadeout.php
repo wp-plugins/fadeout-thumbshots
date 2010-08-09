@@ -4,7 +4,7 @@ Plugin Name: FadeOut-Thumbshots
 Plugin URI: http://www.mynakedgirlfriend.de/wordpress/fadeout-thumbshots/
 Description: This plugin dynamically shows a preview tooltip for hyperlinks on your WordPress site.
 Author: Thomas Schulte
-Version: 1.999
+Version: 2.0
 Author URI: http://www.mynakedgirlfriend.de
 
 Copyright (C) 2010 Thomas Schulte
@@ -27,8 +27,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 $ts_fadeout_version = get_option('ts_fadeout_version');
-if($ts_fadeout_version == '' || $ts_fadeout_version != "1.999") {
-	add_option('ts_fadeout_version','1.999','Version of the plugin FadeOut-Thumbshots','yes');
+if($ts_fadeout_version == '' || $ts_fadeout_version != "2.0") {
+	add_option('ts_fadeout_version','2.0','Version of the plugin FadeOut-Thumbshots','yes');
 }
 
 $ts_fadeout_active = get_option('ts_fadeout_active');
@@ -64,6 +64,11 @@ if($ts_fadeout_dummylang == '') {
 $ts_fadeout_code_placement = get_option('ts_fadeout_code_placement');
 if($ts_fadeout_code_placement == '') {
 	add_option('ts_fadeout_code_placement','head');
+}
+
+$ts_fadeout_fade_direction = get_option('ts_fadeout_fade_direction');
+if($ts_fadeout_fade_direction == '') {
+	add_option('ts_fadeout_fade_direction','1');
 }
 
 
@@ -110,6 +115,7 @@ function ts_fadeout_options(){
 		$dummylang = $_POST['dummylang'];
 		$code_placement = $_POST['code_placement'];
 		$include_pages = $_POST['include_pages'];
+		$fade_direction = $_POST['fade_direction'];
 
 		if($active == 'yes') {
 			update_option('ts_fadeout_active','yes');
@@ -149,6 +155,10 @@ function ts_fadeout_options(){
 
 		//FIXME: validation missing; overwrite even if empty
 		update_option('ts_fadeout_include_pages',$include_pages);
+		
+		if(in_array($fade_direction, array("1", "2"))) {
+			update_option('ts_fadeout_fade_direction',$fade_direction);
+		}
 
 		echo('<div id="message" class="updated fade"><p><strong>Your options were saved.</strong></p></div>');
 	}
@@ -161,6 +171,7 @@ function ts_fadeout_options(){
 	$dummylang = get_option('ts_fadeout_dummylang');
 	$code_placement = get_option('ts_fadeout_code_placement');
 	$include_pages = get_option('ts_fadeout_include_pages');
+	$fade_direction = get_option('ts_fadeout_fade_direction');
   
 	echo('<div class="wrap">');
 	echo('<form method="post" accept-charset="utf-8">');
@@ -171,10 +182,12 @@ function ts_fadeout_options(){
 	echo('<li>Tooltips can be used for three types of links. "All" just means all links that exist on a page and "external" hides the thumbshots for internal links.</li>');
 	echo('<li>Using the option value "marked" means, that the tooltip-thumbshots are only shown if a link has a style class named "fadeout".</li>');
 	echo('<li>The opacity may be set according your needs. I prefer using "0.1", "0.2"... "1" to adjust the opacity.</li>');
-	echo('<li>Although it\'s up to you to decide whether you\'d like to place a backlink on your site or not, the Fadeout homepage says that using their thumbshots requires a backlink to their site. You can enable/disable the footer info with the corresponding select field. The footer was developed very roughly, so if you like the plugin, please link the two domains <a href="http://www.fadeout.de">www.fadeout.de</a> and <a href="http://www.mynakedgirlfriend.de">www.mynakedgirlfriend.de</a> somewhere in your blog. Thanks!</li>');
 	echo('<li>The option "code placement" defines the place where the plugin javascript is integrated. The default is "head" (which means the html head tag) but it\'s also possible to put the code at the end of your page by choosing "footer"</li>');
 	echo('<li>While in "external" or "all" mode, you can limit the plugin to explicit defined pages with the option "include pages". Just leave it empty to ignore this feature. :-)</li>');
+	echo('<li>With "fading direction" you can easily switch the angle of the images (right = left:big to right:small / left = right:big to left:small).</li>');
 	echo('</ol>');
+	echo('<p>Although it\'s up to you to decide whether you\'d like to place a backlink on your site or not, the Fadeout homepage says that using their thumbshots requires a backlink to their site. You can enable/disable the footer info with the corresponding select field. The footer was developed very roughly, so if you like the plugin, please link the two domains <a href="http://www.fadeout.de">www.fadeout.de</a> and <a href="http://www.mynakedgirlfriend.de">www.mynakedgirlfriend.de</a> somewhere in your blog. Thanks!</p>');
+	echo('<p>Your feedback should go here: http://www.mynakedgirlfriend.de/wordpress/fadeout-thumbshots/</p>');
 	echo('<br>');
 	echo('
 		<h3>Settings</h3>
@@ -251,6 +264,15 @@ function ts_fadeout_options(){
 					<input type="text" size="20" name="include_pages" value ="' . $include_pages . '"> (separate with whitespaces - keep field empty to include all)
 				</td>
 			</tr>
+			<tr>
+				<td>fading direction:&nbsp;</td>
+				<td>
+					<select name="fade_direction" id="fade_direction">
+						<option value="1" label="right"'); if ($fade_direction == '1') echo(' selected=selected'); echo('>right</option>
+						<option value="2" label="left"'); if ($fade_direction == '2') echo(' selected=selected'); echo('>left</option>
+					</select>
+				</td>
+			</tr>
 		</table>');  
   
 	echo('
@@ -302,7 +324,7 @@ function ts_fadeout_styles() {
 						$header.= 'width: 278px; height: 298px;';
 						break;
 					case 5:
-						$header.= 'width: 241x; height: 253px;';
+						$header.= 'width: 241px; height: 253px;';
 						break;
 					case 6:
 						$header.= 'width: 216px; height: 223px;';
@@ -405,7 +427,7 @@ function ts_fadeout_scripts() {
 						left: 5,
 						fade: 250,
 						bodyHandler: function() {
-							image = "http://fadeout.de/thumbshot-pro/?scale=' . get_option('ts_fadeout_scaling') . '&url=" + this + "&wp=1&lang=' . get_option('ts_fadeout_dummylang') . '";
+							image = "http://fadeout.de/thumbshot-pro/?scale=' . get_option('ts_fadeout_scaling') . '&url=" + this + "&wp=1&lang=' . get_option('ts_fadeout_dummylang') . '&effect=' . get_option('ts_fadeout_fade_direction') . '";
 							return $("<img style=\"border: none;\" />").attr("src", image);';
 
 						$header.= '}
@@ -419,7 +441,7 @@ function ts_fadeout_scripts() {
 
 
 function ts_fadeout_about() {
-	$footer.= '<div style="text-align:center;"><a href="http://fadeout.de/"><img style="vertical-align:middle;" src="http://fadeout.de/images/link.gif" alt="FadeOut-Thumbshots"></a>&nbsp;Plugin by <a href="http://www.mynakedgirlfriend.de">MyNakedGirlfriend.de</a></div>';
+	$footer.= '<div style="text-align:center; font-size: xx-small;"><a href="http://fadeout.de/"><img style="vertical-align:middle;" src="http://fadeout.de/images/link.gif" alt="FadeOut-Thumbshots"></a>&nbsp;Plugin by <a href="http://www.mynakedgirlfriend.de">Thomas Schulte</a></div>';
 	print($footer);
 }
 
