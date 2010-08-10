@@ -3,8 +3,8 @@ Contributors: CupRacer
 Donate link: http://www.mynakedgirlfriend.de/
 Tags: image, plugin, thumbshot, preview, tooltip, thumbnail
 Requires at least: 2.9
-Tested up to: 2.9.2
-Stable tag: 1.999
+Tested up to: 3.0.1
+Stable tag: 2.01
 
 This plugin dynamically shows a preview tooltip for hyperlinks on your WordPress site.
 
@@ -21,6 +21,9 @@ which offers the thumbnail service for free.
 For the tooltip effect a library called "jQuery Tooltip" is used (currently v1.3).
 Find more about it here: http://bassistance.de/jquery-plugins/jquery-plugin-tooltip/
 
+UPDATE 2010-08-10:
+I got a lot of responses relating to new features and I'm already planning the implementations.
+So thanks for your feedback and stay tuned for more news to arrive. :-)
 
 
 == Installation ==
@@ -31,7 +34,7 @@ Find more about it here: http://bassistance.de/jquery-plugins/jquery-plugin-tool
 
 == Frequently Asked Questions ==
 
-= Why does it take a couple of hovers to get the link image to appear? =
+= Why does it take a couple of mouse hovers to get the link image to appear? =
 
 It's not a bug - it's a mechanism.
 The plugin doesn't generate the thumbnails directly. The script sends a request for the thumbnail to the service of http://fadeout.de. If the URL is requested for the first time, it'll be put in a queue - and you see a "coming soon". After a few moments the thumbnail is created at fadeout.de, so if you hover the link, the request for the thumbnail is successful and it's served and shown correctly.
@@ -43,6 +46,13 @@ The plugin doesn't generate the thumbnails directly. The script sends a request 
 
 
 == Changelog ==
+
+= 2.01 =
+* You may additionally use the CSS class "nofadeout" to explicitly disable the preview tooltip for single hyperlinks when using the preview types "all" or "external". (Thx to David A. for his suggest)
+* Add an option to exclude URLs from being previewed. (Thx to Zale for suggesting this)
+
+= 2.0 =
+* Added an option to choose the fading direction of the images (right = big to small / left = small to big).
 
 = 1.999 =
 * Added an option to define where the javascript code should be placed on a page (in html head tag or the footer).
